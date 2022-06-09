@@ -1,11 +1,25 @@
 {
   "name": "hikari-app-api",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
   "author": "SDMasterGames <sdmastergames@hotmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/SDMasterGames/hikari-api-app.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsnd --respawn --transpile-only src/server.ts"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.41",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.7.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1"
+  }
 }
