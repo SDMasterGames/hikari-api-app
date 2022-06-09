@@ -1,0 +1,11 @@
+{
+  "name": "hikari-app-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "SDMasterGames <sdmastergames@hotmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SDMasterGames/hikari-api-app.git"
+  },
+  "license": "MIT"
+}

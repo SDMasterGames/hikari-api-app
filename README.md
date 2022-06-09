@@ -1,0 +1,1 @@
+# Api para o Aplicativo da Hikari Scan.
