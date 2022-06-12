@@ -1,5 +1,6 @@
-import 'dotenv/config'
+import "dotenv/config";
 import express from "express";
+import { EndpointProjects } from "./routes/";
 
 export class App {
   public app: express.Application;
@@ -12,6 +13,8 @@ export class App {
     this.app.get("/", (req, res) => {
       res.send("Hello World!");
     });
+
+    this.app.use(new EndpointProjects().router);
   }
 
   listen(port: string | number) {
