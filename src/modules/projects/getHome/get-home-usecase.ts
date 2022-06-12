@@ -7,10 +7,15 @@ export class getHomeUseCase {
   constructor(private IProjectsRepository: IProjectsRepository) {}
 
   async execute({ page }: IGetHomeRequestDTO): Promise<IHttpResponse> {
-    const response = await this.IProjectsRepository.getProjectsReleases(page);
+    try {
+      const response = await this.IProjectsRepository.getProjectsReleases(page);
 
-    if (response instanceof ProjectsError) return serverError(response.message);
+      if (response instanceof ProjectsError)
+        return serverError(response.message);
 
-    return ok(response);
+      return ok(response);
+    } catch (error: any) {
+      return serverError(error.message);
+    }
   }
 }
