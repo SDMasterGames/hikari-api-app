@@ -23,7 +23,7 @@ export class ProjectsRepository implements IProjectsRepository {
           id: project.id,
           slug: project.slug,
           type: project.ero_type,
-          last_chapter: project.ero_latest[0].chapter || "",
+          last_chapter: project.ero_latest[0]?.chapter || "",
           status:
             project.ero_status == "Ongoing" ? "Em Lançamento" : "Concluido",
           rating: project.rank_math_seo_score || 0,
@@ -85,4 +85,3 @@ export class ProjectsRepository implements IProjectsRepository {
     return data.source_url || "";
   }
 }
-new ProjectsRepository().getProjectsReleases();
