@@ -1,3 +1,6 @@
+import cheerio from "cheerio";
+
+import { Chapter } from "../../entities/chapter";
 import { IProjectTags, Project } from "../../entities/project";
 import { HikariWebApi } from "../../services/hikari-web-api";
 import { ProjectsError } from "../errors";
@@ -10,6 +13,7 @@ export class ProjectsRepository implements IProjectsRepository {
     const { data, status } = await HikariWebApi.get("/manga", {
       params: {
         page,
+        orderby:"modified"
       },
     });
 
@@ -76,12 +80,75 @@ export class ProjectsRepository implements IProjectsRepository {
   }
 
   async getMediaById(id: string): Promise<string> {
-    const { data, status } = await HikariWebApi.get(`/media/${id}`);
+    try {
+      const { data, status } = await HikariWebApi.get(`/media/${id}`);
 
-    if (!data || status !== 200) {
+      if (!data || status !== 200) {
+        return "";
+      }
+
+      return data.source_url || "";
+    } catch (error) {
       return "";
     }
+  }
 
-    return data.source_url || "";
+  async getChaptersByProjectSlug(
+    slug: string
+  ): Promise<Chapter[] | ProjectsError> {
+    try {
+      const CategoryId = await this.getCategoryIdByProjectSlug(slug);
+      if (CategoryId instanceof ProjectsError) {
+        return CategoryId;
+      }
+      const { data } = await HikariWebApi.get("/posts", {
+        params: {
+          categories: CategoryId,
+        },
+      });
+
+      if (!data || data.length === 0) {
+        return new ProjectsError("No data <getChaptersByProject>");
+      }
+
+      const chapters = data.map((chapter: any): Chapter => {
+        const $ = cheerio.load(chapter.content.rendered);
+        const pags = $("img")
+          .map((i, el) => $(el).attr("src"))
+          .toArray();
+        return new Chapter({
+          id: chapter.id,
+          number: chapter.slug.replace(`${slug}-`, ""),
+          slug: chapter.slug,
+          title: chapter.title.rendered,
+          url: chapter.link,
+          pags: pags || [],
+        });
+      });
+
+      return chapters;
+    } catch (error: any) {
+      return new ProjectsError(`${error.message} <getChaptersByProject>`);
+    }
+  }
+  async getCategoryIdByProjectSlug(
+    slug: string
+  ): Promise<number | ProjectsError> {
+    try {
+      const { data } = await HikariWebApi.get("/categories", {
+        params: {
+          slug,
+        },
+      });
+      if (!data || data.length === 0) {
+        return new ProjectsError(
+          "Não foi encontrado nenhum resultado para esse slug"
+        );
+      }
+
+      return data[0].id;
+    } catch (error) {
+      return new ProjectsError("No data <getCategoryIdByProjectSlug>");
+    }
   }
 }
