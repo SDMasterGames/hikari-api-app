@@ -5,7 +5,6 @@ import { ICacheRepository } from "../interface-cache-repository";
 export class CacheRepository implements ICacheRepository {
   public redis = connectionRedis();
   async get(key: string): Promise<any | undefined> {
-    //console.log(this.redis)
     if (!this.redis) return undefined;
     const results = await this.redis.get(key);
     return results ? JSON.parse(results) : results;
