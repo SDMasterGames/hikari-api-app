@@ -1,3 +1,5 @@
+import { Chapter } from "./chapter";
+
 interface IProjectImages {
   cover: {
     id: number;
@@ -37,7 +39,7 @@ export class Project {
   public update_at: string;
   public status: string;
   public rating: string;
-
+  public chapters?: Chapter[];
   public attributes: IProjectAttributes;
   public media: IProjectImages;
   public tags: IProjectTags[];
