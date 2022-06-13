@@ -25,7 +25,7 @@ export function connectionRedis(): Redis | null {
       redis.disconnect();
       console.error(err);
     });
-    return redis;
+    return redis.status === "ready" ? redis : null;
   } catch (error) {
     return null;
   }
