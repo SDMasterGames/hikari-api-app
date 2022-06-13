@@ -22,9 +22,17 @@ export class getHomeUseCase {
       if (response instanceof ProjectsError)
         return serverError(response.message);
 
-      await this.ICacheRepository.set(cacheKey, response, 20);
-      return ok(response);
+      const slides = response.filter((project) => project.media.banner.active);
+
+      const result = {
+        slides,
+        releases: response,
+      };
+
+      await this.ICacheRepository.set(cacheKey, result, 60 * 1);
+      return ok(result);
     } catch (error: any) {
+      console.log(error);
       return serverError(error.message);
     }
   }
