@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { GetChaptersController } from "../../modules/projects/getChapters";
+import { GetFavoritesController } from "../../modules/projects/getFavorites";
 import { GetHomeController } from "../../modules/projects/getHome";
 
 export class EndpointProjects {
@@ -19,6 +20,14 @@ export class EndpointProjects {
 
     this.router.get(`${this.path}/chapters`, async (req, res) => {
       const { status, data, error } = await GetChaptersController.handle({
+        query: req.query,
+      });
+
+      return res.status(status).json(error ? { error } : data);
+    });
+
+    this.router.get(`${this.path}/favorites`, async (req, res) => {
+      const { status, data, error } = await GetFavoritesController.handle({
         query: req.query,
       });
 
