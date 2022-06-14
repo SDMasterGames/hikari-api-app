@@ -1,6 +1,7 @@
 import { ProjectsError } from "../../../repositories/errors";
 import { ICacheRepository } from "../../../repositories/interface-cache-repository";
 import { IProjectsRepository } from "../../../repositories/interface-projects-repository";
+import { MissingParams } from "../../errors/";
 import { badRequest, IHttpResponse, ok, serverError } from "../../httpHelper";
 import { IGetChaptersRequestDTO } from "./get-chapters-dto";
 
@@ -13,7 +14,7 @@ export class getChaptersUseCase {
   async execute({ slug }: IGetChaptersRequestDTO): Promise<IHttpResponse> {
     try {
       if (!slug) {
-        return badRequest(new Error("Slug is required"));
+        return badRequest(new MissingParams("slug is required"));
       }
       const cache = await this.ICacheRepository.get(`chapters-${slug}`);
      
