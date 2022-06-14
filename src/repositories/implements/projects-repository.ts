@@ -7,13 +7,49 @@ import { ProjectsError } from "../errors";
 import { IProjectsRepository } from "../interface-projects-repository";
 
 export class ProjectsRepository implements IProjectsRepository {
+  async MainProjectLoad(project: any): Promise<Project> {
+    return new Project({
+      id: project.id,
+      slug: project.slug,
+      type: project.ero_type,
+      last_chapter: project.ero_latest[0]?.chapter || "",
+      status: project.ero_status == "Ongoing" ? "Em Lançamento" : "Concluido",
+      rating: project.rank_math_seo_score || 0,
+      tags: await this.getTagsByIds(project.genres),
+      adult: project.genres?.includes(26),
+      update_at: project.modified_gmt,
+      attributes: {
+        title: project.title.rendered,
+        alt_title: project.ero_japanese,
+        description: project.content.rendered,
+        link: project.link,
+      },
+      media: {
+        banner: {
+          id: project.ero_cover,
+          active: project.ero_slider == 1,
+          url: await this.getMediaById(project.ero_cover), //é apenas o id, ainda não é a url
+        },
+        cover: {
+          id: project.featured_media,
+          url: await this.getMediaById(project.featured_media), //é apenas o id, ainda não é a url
+        },
+      },
+      relationships: {
+        author: project.ero_author,
+        artist: project.ero_artist,
+        publisher: project.ero_serialization,
+      },
+    });
+  }
+
   async getProjectsReleases(
     page: number = 1
   ): Promise<Project[] | ProjectsError> {
     const { data, status } = await HikariWebApi.get("/manga", {
       params: {
         page,
-        orderby:"modified"
+        orderby: "modified",
       },
     });
 
@@ -22,42 +58,7 @@ export class ProjectsRepository implements IProjectsRepository {
     }
 
     const projects = await Promise.all(
-      data.map(async (project: any) => {
-        return new Project({
-          id: project.id,
-          slug: project.slug,
-          type: project.ero_type,
-          last_chapter: project.ero_latest[0]?.chapter || "",
-          status:
-            project.ero_status == "Ongoing" ? "Em Lançamento" : "Concluido",
-          rating: project.rank_math_seo_score || 0,
-          tags: await this.getTagsByIds(project.genres),
-          adult: project.genres?.includes(26),
-          update_at: project.modified_gmt,
-          attributes: {
-            title: project.title.rendered,
-            alt_title: project.ero_japanese,
-            description: project.content.rendered,
-            link: project.link,
-          },
-          media: {
-            banner: {
-              id: project.ero_cover,
-              active: project.ero_slider == 1,
-              url: await this.getMediaById(project.ero_cover), //é apenas o id, ainda não é a url
-            },
-            cover: {
-              id: project.featured_media,
-              url: await this.getMediaById(project.featured_media), //é apenas o id, ainda não é a url
-            },
-          },
-          relationships: {
-            author: project.ero_author,
-            artist: project.ero_artist,
-            publisher: project.ero_serialization,
-          },
-        });
-      })
+      data.map(async (project: any) => await this.MainProjectLoad(project))
     );
     return projects;
   }
@@ -149,6 +150,30 @@ export class ProjectsRepository implements IProjectsRepository {
       return data[0].id;
     } catch (error) {
       return new ProjectsError("No data <getCategoryIdByProjectSlug>");
+    }
+  }
+
+  async getProjectsByIds(id: string[]): Promise<ProjectsError | Project[]> {
+    try {
+      const { data } = await HikariWebApi.get("/manga", {
+        params: {
+          includes: id.join(", "),
+          per_page: id.length,
+        },
+      });
+      if (!data || data.length === 0) {
+        return new ProjectsError(
+          "Encontrei nenhum projeto com os ids informados <getProjectsByIds>"
+        );
+      }
+
+      const projectsFavorites = await Promise.all(
+        data.map(async (project: any) => await this.MainProjectLoad(project))
+      );
+
+      return projectsFavorites;
+    } catch (error: any) {
+      return new ProjectsError(`${error.message} <getProjectsByIds>`);
     }
   }
 }
