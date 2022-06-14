@@ -1,5 +1,7 @@
+import { randomInt } from "crypto";
+
 export class Chapter {
-  public id: string;
+  public id: number;
   public title: string;
   public slug: string;
   public number: string;
@@ -7,5 +9,16 @@ export class Chapter {
   public pags?: string[];
   constructor(props: Chapter) {
     Object.assign(this, props);
+  }
+
+  static Fake(slug?:string): Chapter {
+    return {
+      id: randomInt(100),
+      title: "",
+      slug: slug || "",
+      number: "",
+      url: "",
+      pags: [],
+    };
   }
 }

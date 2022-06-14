@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import { Chapter } from "./chapter";
 
 interface IProjectImages {
@@ -47,5 +48,46 @@ export class Project {
 
   constructor(props: Project) {
     Object.assign(this, props);
+  }
+
+  static Fake(id?: number): Project {
+    return {
+      adult: false,
+      attributes: {
+        alt_title: "",
+        description: "",
+        link: "",
+        title: "",
+      },
+      id: id || randomInt(2000),
+      last_chapter: "",
+      media: {
+        banner: {
+          active: randomInt(1) === 1,
+          id: randomInt(2000),
+          url: "",
+        },
+        cover: {
+          id: randomInt(2000),
+          url: "",
+        },
+      },
+      rating: "",
+      relationships: {
+        artist: "",
+        author: "",
+        publisher: "",
+      },
+      slug: "",
+      status: "",
+      tags: [
+        {
+          id: randomInt(10),
+          name: "",
+        },
+      ],
+      type: "",
+      update_at: "",
+    };
   }
 }
