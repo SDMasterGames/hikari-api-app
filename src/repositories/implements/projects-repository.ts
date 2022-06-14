@@ -63,7 +63,7 @@ export class ProjectsRepository implements IProjectsRepository {
     return projects;
   }
 
-  async getTagsByIds(id: string[]): Promise<IProjectTags[]> {
+  async getTagsByIds(id: number[]): Promise<IProjectTags[]> {
     const { data, status } = await HikariWebApi.get(`/genres/`, {
       params: {
         includes: id.join(", "),
@@ -80,7 +80,7 @@ export class ProjectsRepository implements IProjectsRepository {
     return tags;
   }
 
-  async getMediaById(id: string): Promise<string> {
+  async getMediaById(id: number): Promise<string> {
     try {
       const { data, status } = await HikariWebApi.get(`/media/${id}`);
 
@@ -153,11 +153,11 @@ export class ProjectsRepository implements IProjectsRepository {
     }
   }
 
-  async getProjectsByIds(id: string[]): Promise<ProjectsError | Project[]> {
+  async getProjectsByIds(id: string): Promise<ProjectsError | Project[]> {
     try {
       const { data } = await HikariWebApi.get("/manga", {
         params: {
-          includes: id.join(", "),
+          includes: id,
           per_page: id.length,
         },
       });
