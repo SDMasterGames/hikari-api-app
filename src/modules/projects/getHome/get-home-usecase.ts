@@ -1,7 +1,8 @@
 import { ProjectsError } from "../../../repositories/errors";
 import { ICacheRepository } from "../../../repositories/interface-cache-repository";
 import { IProjectsRepository } from "../../../repositories/interface-projects-repository";
-import { IHttpResponse, ok, serverError } from "../../httpHelper";
+import { InvalidParams } from "../../errors/";
+import { badRequest, IHttpResponse, ok, serverError } from "../../httpHelper";
 import { IGetHomeRequestDTO } from "./get-home-dto";
 
 export class getHomeUseCase {
@@ -12,12 +13,21 @@ export class getHomeUseCase {
 
   async execute({ page }: IGetHomeRequestDTO): Promise<IHttpResponse> {
     try {
-      const cacheKey = `home:${page}`;
+      let pageNumber;
+      if (page) {
+        pageNumber = Number(page);
+        if (!Number.isInteger(pageNumber)) {
+          return badRequest(new InvalidParams("Valor da pagina invalida!"));
+        }
+      }
 
+      const cacheKey = `home:${page}`;
       const cache = await this.ICacheRepository.get(cacheKey);
       if (cache) return ok(cache);
 
-      const response = await this.IProjectsRepository.getProjectsReleases(page);
+      const response = await this.IProjectsRepository.getProjectsReleases(
+        pageNumber
+      );
 
       if (response instanceof ProjectsError)
         return serverError(response.message);
