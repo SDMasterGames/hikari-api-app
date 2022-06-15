@@ -27,7 +27,8 @@ export class getFavoritesUseCase {
         return ok(cache);
       }
       const projects = await this.IProjectsRepository.getProjectsByIds(
-        ids.join(",")
+        ids.join(", "),
+        ids.length
       );
 
       if (projects instanceof ProjectsError) {
