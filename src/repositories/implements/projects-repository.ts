@@ -153,12 +153,15 @@ export class ProjectsRepository implements IProjectsRepository {
     }
   }
 
-  async getProjectsByIds(id: string): Promise<ProjectsError | Project[]> {
+  async getProjectsByIds(
+    id: string,
+    per_page: number
+  ): Promise<ProjectsError | Project[]> {
     try {
       const { data } = await HikariWebApi.get("/manga", {
         params: {
-          includes: id,
-          per_page: id.length,
+          include: id,
+          per_page,
         },
       });
       if (!data || data.length === 0) {
