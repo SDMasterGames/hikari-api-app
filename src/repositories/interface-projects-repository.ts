@@ -7,9 +7,11 @@ export interface IProjectsRepository {
   getMediaById(id: number): Promise<string>;
 
   getProjectsReleases(page?: number): Promise<Project[] | ProjectsError>;
-  getProjectsByIds(id: string): Promise<Project[] | ProjectsError>;
+  getProjectsByIds(
+    id: string,
+    per_page: number
+  ): Promise<Project[] | ProjectsError>;
 
   getChaptersByProjectSlug(slug: string): Promise<Chapter[] | ProjectsError>;
   getCategoryIdByProjectSlug(slug: string): Promise<number | ProjectsError>;
-
 }
