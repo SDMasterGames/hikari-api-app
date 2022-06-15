@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { GetChaptersController } from "../../modules/projects/getChapters";
-import { GetFavoritesController } from "../../modules/projects/getFavorites";
-import { GetHomeController } from "../../modules/projects/getHome";
+import {
+  GetChaptersController,
+  GetFavoritesController,
+  GetHomeController,
+} from "../../modules/projects/";
 
 export class EndpointProjects {
   public path = "/projects";
