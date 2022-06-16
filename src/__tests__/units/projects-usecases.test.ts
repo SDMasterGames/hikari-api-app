@@ -51,7 +51,7 @@ describe("Modulo - Projects", () => {
       });
       expect(status).toBe(400);
       expect(data).toBeUndefined();
-      expect(error).toBe("InvalidParams");
+      expect(error.name).toBe("InvalidParams");
     });
   });
 
@@ -67,9 +67,9 @@ describe("Modulo - Projects", () => {
       const { status, data, error } = await getTestChapters.execute({
         slug: "test",
       });
-      expect(status).toBe(400);
+      expect(status).toBe(500);
       expect(data).toBeUndefined();
-      expect(error).toBe("No Data");
+      expect(error.message).toBe("No Data");
     });
 
     it("Deve retorna um erro ao não informa um slug de projeto", async () => {
@@ -78,7 +78,7 @@ describe("Modulo - Projects", () => {
       });
       expect(status).toBe(400);
       expect(data).toBeUndefined();
-      expect(error).toBe("MissingParams");
+      expect(error.name).toBe("MissingParams");
     });
   });
 
@@ -96,15 +96,15 @@ describe("Modulo - Projects", () => {
         id: "",
       });
       expect(status).toBe(400);
-      expect(error).toBe("MissingParams");
+      expect(error.name).toBe("MissingParams");
     });
 
     it("Falhar ao não encontrar nenhum projeto", async () => {
         const { status, data, error } = await getTestFavorites.execute({
           id: "1",
         });
-        expect(status).toBe(400);
-        expect(error).toBe("No Data");
+        expect(status).toBe(500);
+        expect(error.message).toBe("No Data");
       });
   });
 });

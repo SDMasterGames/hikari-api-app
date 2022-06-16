@@ -19,12 +19,12 @@ describe("Controller - Project", () => {
       expect(response.body.releases).toHaveLength(10);
     });
 
-    it("Deve falhar por informa um valor de page inválido", async () => {
+    it("Deve falhar por informa um valor de pagina inválido", async () => {
       const response = await request(app.app)
         .get("/projects/")
         .query({ page: "A" });
       expect(response.status).toBe(400);
-      expect(response.body.error).toBe("InvalidParams");
+      expect(response.body.error.name).toBe("InvalidParams");
     });
   });
 
@@ -44,17 +44,17 @@ describe("Controller - Project", () => {
       });
 
       expect(response.status).toBe(400);
-      expect(response.body.error).toBe("MissingParams");
+      expect(response.body.error.name).toBe("MissingParams");
     });
 
-    it("Deve falhar na ausência do slug", async () => {
+    it("Deve falhar ao não encontrar capitulos com o slug informado.", async () => {
       const response = await request(app.app).get("/projects/chapters").query({
         slug: "pao-de-arroz",
       });
 
-      expect(response.status).toBe(400);
-      expect(response.body.error).toBe(
-        "Não foi encontrado nenhum resultado para esse slug"
+      expect(response.status).toBe(500);
+      expect(response.body.error.name).toBe(
+        "ServerError"
       );
     });
   });
@@ -73,7 +73,7 @@ describe("Controller - Project", () => {
         id: "",
       });
       expect(response.status).toBe(400);
-      expect(response.body.error).toBe("MissingParams");
+      expect(response.body.error.name).toBe("MissingParams");
     });
   });
 });
