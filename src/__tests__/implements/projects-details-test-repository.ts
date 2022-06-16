@@ -20,7 +20,7 @@ export class ProjectDetailsTestRepository
     return Promise.resolve(ProjectsDetails.get(id) || null);
   }
 
-  async findBySlug(slug: string): Promise<ProjectDetail | null> {
+  async findByProjectIdAndSlug(slug: string): Promise<ProjectDetail | null> {
     let result = null;
     ProjectsDetails.forEach((projectDetail) => {
       if (projectDetail.project_slug === slug) result = projectDetail;
