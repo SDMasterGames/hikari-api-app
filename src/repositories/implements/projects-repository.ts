@@ -3,7 +3,6 @@ import cheerio from "cheerio";
 import { Chapter } from "../../entities/chapter";
 import { IProjectTags, Project } from "../../entities/project";
 import { HikariWebApi } from "../../services/hikari-web-api";
-import { ProjectsError } from "../errors";
 import { IProjectsRepository } from "../interface-projects-repository";
 
 export class ProjectsRepository implements IProjectsRepository {
@@ -43,9 +42,7 @@ export class ProjectsRepository implements IProjectsRepository {
     });
   }
 
-  async getProjectsReleases(
-    page: number = 1
-  ): Promise<Project[] | ProjectsError> {
+  async getProjectsReleases(page: number = 1): Promise<Project[]> {
     const { data, status } = await HikariWebApi.get("/manga", {
       params: {
         page,
@@ -54,7 +51,7 @@ export class ProjectsRepository implements IProjectsRepository {
     });
 
     if (!data || status !== 200) {
-      return new ProjectsError("No data <getProjectsReleases>");
+      throw new Error("No data <getProjectsReleases>");
     }
 
     const projects = await Promise.all(
@@ -94,14 +91,9 @@ export class ProjectsRepository implements IProjectsRepository {
     }
   }
 
-  async getChaptersByProjectSlug(
-    slug: string
-  ): Promise<Chapter[] | ProjectsError> {
+  async getChaptersByProjectSlug(slug: string): Promise<Chapter[]> {
     try {
       const CategoryId = await this.getCategoryIdByProjectSlug(slug);
-      if (CategoryId instanceof ProjectsError) {
-        return CategoryId;
-      }
       const { data } = await HikariWebApi.get("/posts", {
         params: {
           categories: CategoryId,
@@ -109,7 +101,7 @@ export class ProjectsRepository implements IProjectsRepository {
       });
 
       if (!data || data.length === 0) {
-        return new ProjectsError("No data <getChaptersByProject>");
+        throw new Error("No data <getChaptersByProject>");
       }
 
       const chapters = data.map((chapter: any): Chapter => {
@@ -129,54 +121,39 @@ export class ProjectsRepository implements IProjectsRepository {
 
       return chapters;
     } catch (error: any) {
-      return new ProjectsError(`${error.message} <getChaptersByProject>`);
+      throw new Error(error.message);
     }
   }
-  async getCategoryIdByProjectSlug(
-    slug: string
-  ): Promise<number | ProjectsError> {
-    try {
-      const { data } = await HikariWebApi.get("/categories", {
-        params: {
-          slug,
-        },
-      });
-      if (!data || data.length === 0) {
-        return new ProjectsError(
-          "Não foi encontrado nenhum resultado para esse slug"
-        );
-      }
-
-      return data[0].id;
-    } catch (error) {
-      return new ProjectsError("No data <getCategoryIdByProjectSlug>");
+  async getCategoryIdByProjectSlug(slug: string): Promise<number> {
+    const { data } = await HikariWebApi.get("/categories", {
+      params: {
+        slug,
+      },
+    });
+    if (!data || data.length === 0) {
+      throw new Error("Não foi encontrado nenhum resultado para esse slug");
     }
+
+    return data[0].id;
   }
 
-  async getProjectsByIds(
-    id: string,
-    per_page: number
-  ): Promise<ProjectsError | Project[]> {
-    try {
-      const { data } = await HikariWebApi.get("/manga", {
-        params: {
-          include: id,
-          per_page,
-        },
-      });
-      if (!data || data.length === 0) {
-        return new ProjectsError(
-          "Encontrei nenhum projeto com os ids informados <getProjectsByIds>"
-        );
-      }
-
-      const projectsFavorites = await Promise.all(
-        data.map(async (project: any) => await this.MainProjectLoad(project))
+  async getProjectsByIds(id: string, per_page: number): Promise<Project[]> {
+    const { data } = await HikariWebApi.get("/manga", {
+      params: {
+        include: id,
+        per_page,
+      },
+    });
+    if (!data || data.length === 0) {
+      throw new Error(
+        "Encontrei nenhum projeto com os ids informados <getProjectsByIds>"
       );
-
-      return projectsFavorites;
-    } catch (error: any) {
-      return new ProjectsError(`${error.message} <getProjectsByIds>`);
     }
+
+    const projectsFavorites = await Promise.all(
+      data.map(async (project: any) => await this.MainProjectLoad(project))
+    );
+
+    return projectsFavorites;
   }
 }
