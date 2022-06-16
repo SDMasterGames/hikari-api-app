@@ -18,7 +18,10 @@ export class createProjectDetailUseCase {
       }
 
       const ExistingProjectDetail =
-        await this.projectsDetailsRepository.findBySlug(project_slug);
+        await this.projectsDetailsRepository.findByProjectIdAndSlug(
+          project_id,
+          project_slug
+        );
 
       if (ExistingProjectDetail) {
         return badRequest(new Error("project_slug already exists"));
