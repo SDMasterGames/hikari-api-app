@@ -1,4 +1,3 @@
-import { ProjectsError } from "../../../repositories/errors";
 import { ICacheRepository } from "../../../repositories/interface-cache-repository";
 import { IProjectsRepository } from "../../../repositories/interface-projects-repository";
 import { InvalidParams, MissingParams } from "../../errors/";
@@ -30,11 +29,6 @@ export class getFavoritesUseCase {
         ids.join(", "),
         ids.length
       );
-
-      if (projects instanceof ProjectsError) {
-        return badRequest(new Error(projects.message));
-      }
-
       await this.ICacheRepository.set(cacheKey, projects);
       return ok(projects);
     } catch (error: any) {

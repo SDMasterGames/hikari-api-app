@@ -1,4 +1,3 @@
-import { ProjectsError } from "../../../repositories/errors";
 import { ICacheRepository } from "../../../repositories/interface-cache-repository";
 import { IProjectsRepository } from "../../../repositories/interface-projects-repository";
 import { InvalidParams } from "../../errors/";
@@ -29,9 +28,6 @@ export class getHomeUseCase {
         pageNumber
       );
 
-      if (response instanceof ProjectsError)
-        return serverError(response.message);
-
       const slides = response.filter((project) => project.media.banner.active);
 
       const result = {
@@ -42,7 +38,6 @@ export class getHomeUseCase {
       await this.ICacheRepository.set(cacheKey, result, 60 * 1);
       return ok(result);
     } catch (error: any) {
-      console.log(error);
       return serverError(error.message);
     }
   }

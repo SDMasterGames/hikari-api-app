@@ -1,4 +1,3 @@
-import { ProjectsError } from "../../../repositories/errors";
 import { ICacheRepository } from "../../../repositories/interface-cache-repository";
 import { IProjectsRepository } from "../../../repositories/interface-projects-repository";
 import { MissingParams } from "../../errors/";
@@ -25,9 +24,6 @@ export class getChaptersUseCase {
       const chapters = await this.IProjectRepository.getChaptersByProjectSlug(
         slug
       );
-      if (chapters instanceof ProjectsError) {
-        return badRequest(new Error(chapters.message));
-      }
       await this.ICacheRepository.set(`chapters-${slug}`, chapters);
       return ok(chapters);
     } catch (error: any) {
