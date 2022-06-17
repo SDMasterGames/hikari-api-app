@@ -38,6 +38,24 @@ export class ProjectDetail {
     this.comments = props.comments || [];
   }
 
+  views = (value: number = 1) => {
+    if (!Number.isInteger(value)) {
+      throw new Error("Invalid value");
+    }
+
+    const findViews = this.metrics.views.find((views) => {
+      return views.date === new Date().toISOString().split("T")[0];
+    });
+    if (findViews) {
+      findViews.count += value;
+    } else {
+      this.metrics.views.push({
+        count: value,
+        date: new Date().toISOString().split("T")[0],
+      });
+    }
+  };
+
   likes = (id?: string) => {
     if (!id || !ValidateUtils.isStringValid(id)) {
       throw new Error("id is required and must be a string");
