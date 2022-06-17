@@ -6,14 +6,14 @@ jest.setTimeout(10000);
 describe("Controller - Project", () => {
   describe("getProjects", () => {
     it("Deve obter todos os projetos", async () => {
-      const response = await request(app.app).get("/projects/");
+      const response = await request(app.app).get("/v1/projects/");
       expect(response.status).toBe(200);
       expect(response.body.releases).toHaveLength(10);
     });
 
     it("Deve obter todos os projetos da pagina - 2", async () => {
       const response = await request(app.app)
-        .get("/projects/")
+        .get("/v1/projects/")
         .query({ page: 2 });
       expect(response.status).toBe(200);
       expect(response.body.releases).toHaveLength(10);
@@ -21,7 +21,7 @@ describe("Controller - Project", () => {
 
     it("Deve falhar por informa um valor de pagina inválido", async () => {
       const response = await request(app.app)
-        .get("/projects/")
+        .get("/v1/projects/")
         .query({ page: "A" });
       expect(response.status).toBe(400);
       expect(response.body.error.name).toBe("InvalidParams");
@@ -30,7 +30,7 @@ describe("Controller - Project", () => {
 
   describe("getChapters", () => {
     it("Deve obter todos os capitulos", async () => {
-      const response = await request(app.app).get("/projects/chapters").query({
+      const response = await request(app.app).get("/v1/projects/chapters").query({
         slug: "kimi-ga-shinu-made-ato-100nichi",
       });
 
@@ -39,7 +39,7 @@ describe("Controller - Project", () => {
     });
 
     it("Deve falhar na ausência do slug", async () => {
-      const response = await request(app.app).get("/projects/chapters").query({
+      const response = await request(app.app).get("/v1/projects/chapters").query({
         slug: "",
       });
 
@@ -48,7 +48,7 @@ describe("Controller - Project", () => {
     });
 
     it("Deve falhar ao não encontrar capitulos com o slug informado.", async () => {
-      const response = await request(app.app).get("/projects/chapters").query({
+      const response = await request(app.app).get("/v1/projects/chapters").query({
         slug: "pao-de-arroz",
       });
 
@@ -61,7 +61,7 @@ describe("Controller - Project", () => {
 
   describe("getFavorites", () => {
     it("Deve obter todos os capitulos favoritos", async () => {
-      const response = await request(app.app).get("/projects/favorites").query({
+      const response = await request(app.app).get("/v1/projects/favorites").query({
         id: "10054",
       });
       expect(response.status).toBe(200);
@@ -69,7 +69,7 @@ describe("Controller - Project", () => {
     });
 
     it("Deve falhar na ausência de um id inválido", async () => {
-      const response = await request(app.app).get("/projects/favorites").query({
+      const response = await request(app.app).get("/v1/projects/favorites").query({
         id: "",
       });
       expect(response.status).toBe(400);
