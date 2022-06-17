@@ -176,5 +176,60 @@ describe("Module - Projects Details", () => {
         expect(test4.error.name).toBe("ServerError");
       });
     });
+
+    describe("Prop Views", () => {
+      it("deveria atualizar a quantidade do contador dos views", async () => {
+        const { status, data, error } = await updateProjectDetail.execute({
+          data: {
+            views: 1,
+          },
+          id,
+        });
+        expect(status).toBe(200);
+        expect(data).toHaveProperty("metrics.views[0].count", 1);
+        expect(data).toHaveProperty(
+          "metrics.views[0].date",
+          new Date().toISOString().split("T")[0]
+        );
+      });
+
+      it("deveria falhar ao informa um valor invalido", async () => {
+        const test1 = await updateProjectDetail.execute({
+          data: {
+            views: null,
+          },
+          id,
+        });
+        expect(test1.status).toBe(400);
+        expect(test1.error.name).toBe("InvalidParams");
+
+        const test2 = await updateProjectDetail.execute({
+          data: {
+            views: undefined,
+          },
+          id,
+        });
+        expect(test2.status).toBe(400);
+        expect(test2.error.name).toBe("InvalidParams");
+
+        const test3 = await updateProjectDetail.execute({
+          data: {
+            views: "",
+          },
+          id,
+        });
+        expect(test3.status).toBe(400);
+        expect(test3.error.name).toBe("InvalidParams");
+
+        const test4 = await updateProjectDetail.execute({
+          data: {
+            views: "sd",
+          },
+          id,
+        });
+        expect(test4.status).toBe(500);
+        expect(test4.error.name).toBe("ServerError");
+      });
+    });
   });
 });
