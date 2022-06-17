@@ -13,6 +13,8 @@ export class ProjectDetailsTestRepository
       project_id: data.project_id,
       project_slug: data.project_slug,
     });
+    ProjectsDetails.set(projectDetail.id, projectDetail);
+
     return Promise.resolve(projectDetail);
   }
 
@@ -26,5 +28,10 @@ export class ProjectDetailsTestRepository
       if (projectDetail.project_slug === slug) result = projectDetail;
     });
     return Promise.resolve(result);
+  }
+
+  async update(id: string, data: ProjectDetail): Promise<ProjectDetail> {
+    ProjectsDetails.set(id, data);
+    return Promise.resolve(data);
   }
 }
