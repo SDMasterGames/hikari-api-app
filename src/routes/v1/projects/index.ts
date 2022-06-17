@@ -3,10 +3,10 @@ import {
   GetChaptersController,
   GetFavoritesController,
   GetHomeController,
-} from "../../modules/projects/";
+} from "../../../modules/projects/";
 
 export class EndpointProjects {
-  public path = "/projects";
+  public path = "/v1/projects";
   public router = Router();
   constructor() {
     this.initRoutes();
