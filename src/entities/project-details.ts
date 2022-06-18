@@ -56,6 +56,13 @@ export class ProjectDetail {
     }
   };
 
+  addComment = (id?: string) => {
+    if (!id || !ValidateUtils.isStringValid(id)) {
+      throw new Error("id is required and must be a string");
+    }
+    this.comments.push(id)
+  };
+
   likes = (id?: string) => {
     if (!id || !ValidateUtils.isStringValid(id)) {
       throw new Error("id is required and must be a string");
