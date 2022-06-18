@@ -5,7 +5,7 @@ import { NotFoundError } from "../../errors/not-found-error";
 import { badRequest, IHttpResponse, ok, serverError } from "../../httpHelper";
 import { IUpdateProjectDetailRequestDTO } from "./update-project-detail-dto";
 
-type AcceptableTypes = "likes" | "clicks" | "views";
+type AcceptableTypes = "likes" | "clicks" | "views" | "addComment";
 
 export class updateProjectDetailUseCase {
   constructor(private projectDetailRepository: IProjectsDetailsRepository) {}
