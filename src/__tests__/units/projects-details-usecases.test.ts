@@ -231,5 +231,30 @@ describe("Module - Projects Details", () => {
         expect(test4.error.name).toBe("ServerError");
       });
     });
+
+    describe("Prop Comments", () => {
+      it("deveria adicionar um comentario com sucesso", async () => {
+        const { status, data, error } = await updateProjectDetail.execute({
+          id,
+          data: {
+            addComment: "test_id",
+          },
+        });
+        expect(status).toBe(200);
+        expect(data).toHaveProperty("comments[0]", "test_id");
+      });
+
+
+      it("deveria falha caso seja informado um id invalid", async () => {
+        const { status, data, error } = await updateProjectDetail.execute({
+          id,
+          data: {
+            addComment: "",
+          },
+        });
+        expect(status).toBe(400);
+        expect(error.name).toBe("InvalidParams");
+      });
+    });
   });
 });
