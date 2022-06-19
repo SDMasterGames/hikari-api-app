@@ -1,7 +1,6 @@
 import { ProjectDetail } from "../../../entities/project-details";
 import { IProjectsDetailsRepository } from "../../../repositories/interface-projects-details-repository";
-import { InvalidParams, MissingParams } from "../../errors";
-import { NotFoundError } from "../../errors/not-found-error";
+import { InvalidParams, MissingParams, NotFoundError } from "../../errors";
 import { badRequest, IHttpResponse, ok, serverError } from "../../httpHelper";
 import { IUpdateProjectDetailRequestDTO } from "./update-project-detail-dto";
 
