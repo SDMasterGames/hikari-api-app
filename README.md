@@ -28,6 +28,8 @@ O Aplicativo da [Hikari Scan](https://play.google.com/store/apps/details?id=com.
 - Cheerio
 - Cors
 - Dotenv
+- JWT
+    - JsonWebToken
 
 
 
