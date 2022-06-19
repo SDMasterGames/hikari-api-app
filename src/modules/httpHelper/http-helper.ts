@@ -6,6 +6,11 @@ export const badRequest = (error: Error): IHttpResponse => ({
   error,
 });
 
+export const created = (data: any): IHttpResponse => ({
+  status: 201,
+  data,
+});
+
 export const ok = (data: any): IHttpResponse => ({
   status: 200,
   data,
