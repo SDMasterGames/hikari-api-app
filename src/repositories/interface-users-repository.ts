@@ -16,4 +16,5 @@ export interface IUsersRepository {
   create(data:ICreateUserData): Promise<User>;
 
   findByEmailAndUuid(data:IFindByEmailAndUuidData): Promise<boolean>;
+  findById(uuid:string): Promise<User | null>;
 }
