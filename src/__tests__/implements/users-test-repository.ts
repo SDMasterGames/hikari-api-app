@@ -35,4 +35,8 @@ export class UsersTestRepository implements IUsersRepository {
     });
     return Promise.resolve(!!user);
   }
+
+  async findById(id: string): Promise<User | null> {
+    return Promise.resolve(users.get(id) || null);
+  }
 }
