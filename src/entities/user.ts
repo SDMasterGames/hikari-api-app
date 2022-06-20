@@ -22,8 +22,8 @@ interface IChaptersReadProps {
 }
 
 export class User {
+  private uuid: string;
   public id: string;
-  public uuid: string;
   public profile: {
     username: string;
     email: string;
