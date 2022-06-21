@@ -21,6 +21,14 @@ interface IChaptersReadProps {
   chapters: string[];
 }
 
+interface IUserGet extends Omit<IUserProps, "uuid"> {
+  create_at: string;
+  update_at: string;
+  favorites: string[];
+  id: string;
+  chapters_read: IChaptersReadProps[];
+}
+
 export class User {
   private uuid: string;
   public id: string;
@@ -49,5 +57,20 @@ export class User {
 
     this.chapters_read = props.chapters_read || [];
     this.favorites = props.favorites || [];
+  }
+
+  get(): IUserGet {
+    return {
+      chapters_read: this.chapters_read,
+      create_at: this.create_at,
+      favorites: this.favorites,
+      profile: this.profile,
+      update_at: this.updated_at,
+      id: this.id,
+    };
+  }
+
+  getUuid() {
+    return this.uuid;
   }
 }
