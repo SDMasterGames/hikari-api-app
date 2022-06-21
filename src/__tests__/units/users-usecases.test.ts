@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import { authUserUseCase } from "../../modules/users/auth/auth-user-usecase";
 import { createUserUseCase } from "../../modules/users/create/create-user-usecase";
 import { getUserUseCase } from "../../modules/users/getUser/get-user-usecase";
 import { AuthTestRepository } from "../implements/auth-test-repository";
@@ -8,6 +9,7 @@ const usersRepository = new UsersTestRepository();
 const authRepository = new AuthTestRepository();
 
 const createUser = new createUserUseCase(usersRepository, authRepository);
+const authUser = new authUserUseCase(usersRepository, authRepository);
 const getUser = new getUserUseCase(usersRepository);
 
 describe("Module - Users", () => {
@@ -43,6 +45,40 @@ describe("Module - Users", () => {
       expect(status).toBe(400);
       expect(error.name).toBe("AlreadyExistsError");
     });
+  });
+
+  describe("Auth User", () => {
+    it("deveria retornar o usuário autenticado com o token", async () => {
+      const { status, data, error } = await authUser.execute({
+        email: user.email,
+        uuid: user.uuid,
+      });
+
+      expect(status).toBe(200);
+      expect(data).toHaveProperty("token");
+      expect(data).toHaveProperty("user");
+      expect(data.user).not.toHaveProperty("uuid");
+      expect(data.user).toHaveProperty("id");
+    });
+
+    it("deveria falhar na ausência do email",async()=>{
+      const { status, data, error } = await authUser.execute({
+        email: "",
+        uuid: user.uuid,
+      });
+
+      expect(status).toBe(400);
+      expect(error.name).toBe("MissingParams");
+    })
+    it("deveria falhar na ausência do uuid",async()=>{
+      const { status, data, error } = await authUser.execute({
+        email: user.email,
+        uuid: "",
+      });
+
+      expect(status).toBe(400);
+      expect(error.name).toBe("MissingParams");
+    })
   });
 
   describe("Get User", () => {

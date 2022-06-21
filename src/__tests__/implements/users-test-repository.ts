@@ -5,7 +5,7 @@ import {
   ICreateUserData,
 } from "../../repositories/interface-users-repository";
 
-const users = new Map<string, User>();
+const users = new Map<string, any>();
 
 export class UsersTestRepository implements IUsersRepository {
   create({
@@ -26,14 +26,16 @@ export class UsersTestRepository implements IUsersRepository {
     return Promise.resolve(user);
   }
 
-  findByEmailAndUuid(data: IFindByEmailAndUuidData): Promise<boolean> {
+  findByEmailAndUuid(data: IFindByEmailAndUuidData): Promise<User | null> {
     var user = null;
     users.forEach((value, key) => {
-      if (value.profile.email === data.email || value.uuid === data.uuid) {
+      const {id,...props} = value
+      const item = new User(props,id);
+      if (value.profile.email === data.email || item.getUuid() === data.uuid) {
         user = value;
       }
     });
-    return Promise.resolve(!!user);
+    return Promise.resolve(user || null);
   }
 
   async findById(id: string): Promise<User | null> {
