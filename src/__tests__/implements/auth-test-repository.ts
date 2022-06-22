@@ -6,13 +6,19 @@ const private_key = "private_key";
 export class AuthTestRepository implements IAuthRepository {
   async authenticate(uuid: string): Promise<string> {
     const jwt = JWT.sign({ uuid }, private_key, {
-      expiresIn: "10s", // 1 minuto
+      expiresIn: "1s",
     });
     return jwt;
   }
 
   async verify(token: string): Promise<any> {
-    const decoded = JWT.verify(token, private_key);
-    return decoded;
+    try {
+      const decoded = JWT.verify(token, private_key,{
+        ignoreExpiration:false
+      });
+      return { data: decoded };
+    } catch (error) {
+      return { error };
+    }
   }
 }
