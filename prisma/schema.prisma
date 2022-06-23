@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ProjectDetails {
+  id           String   @id @default(uuid())
+  project_slug String
+  project_id   String
+  metrics      Metrics?
+  comments     String[]
+}
+
+model Metrics {
+  id                Int                @id @default(autoincrement())
+  project_detail_id String             @unique
+  project_detail    ProjectDetails     @relation(fields: [project_detail_id], references: [id])
+  views             MetricsDataView[]
+  clicks            MetricsDataClick[]
+  likes             String[]
+}
+
+model MetricsDataView {
+  id        Int      @id @default(autoincrement())
+  count     Int
+  date      String
+  Metrics   Metrics? @relation(fields: [metricsId], references: [id])
+  metricsId Int?
+}
+
+model MetricsDataClick {
+  id        Int      @id @default(autoincrement())
+  count     Int
+  date      String
+  Metrics   Metrics? @relation(fields: [metricsId], references: [id])
+  metricsId Int?
+}
