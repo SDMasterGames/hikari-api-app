@@ -34,4 +34,8 @@ export class ProjectDetailsTestRepository
     ProjectsDetails.set(id, data);
     return Promise.resolve(data);
   }
+
+  async cleandb(): Promise<void> {
+    ProjectsDetails.clear()
+  }
 }
