@@ -1,5 +1,5 @@
 import { IProjectsDetailsRepository } from "../../../repositories/interface-projects-details-repository";
-import { MissingParams } from "../../errors";
+import { AlreadyExistsError, MissingParams } from "../../errors";
 import { badRequest, IHttpResponse, ok, serverError } from "../../httpHelper";
 import { ICreateProjectDetailRequestDTO } from "./create-project-detail-dto";
 
@@ -13,7 +13,7 @@ export class createProjectDetailUseCase {
     try {
       if (!project_id || !project_slug) {
         return badRequest(
-          new MissingParams("project_id or project_slug is missing")
+          new MissingParams("project_id ou project_slug não informado")
         );
       }
 
@@ -24,7 +24,7 @@ export class createProjectDetailUseCase {
         );
 
       if (ExistingProjectDetail) {
-        return badRequest(new Error("project_slug already exists"));
+        return badRequest(new AlreadyExistsError("projeto já foi cadastrado"));
       }
 
       const projectDetail = await this.projectsDetailsRepository.create({
