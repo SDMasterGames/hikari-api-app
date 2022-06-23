@@ -4,5 +4,36 @@ services:
   redis:
     image: redis:7.0-alpine
     command: redis-server --requirepass developer
+
     ports:
       - "6379:6379"
+  db:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+  dev:
+    image: hikari-api-app
+    build: .
+    depends_on:
+      - redis
+      - db
+    command: yarn dev
+    environment:
+      DATABASE_URL: db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: developer
+    links:
+      - redis
+      - db
+    ports:
+      - "8000:8000"
+      - "8181:8181"
+    volumes:
+      - .:/hikari-api-app
+      - node_modules:/node_modules
+
+volumes:
+  node_modules: {}
