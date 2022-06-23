@@ -22,6 +22,16 @@ describe("Controller - Project Details", () => {
       expect(response.body).toHaveProperty("id");
     });
 
+    it("deveria falhar caso já exista",async()=>{
+      const response = await request(app.app).post("/v1/projects/details").send({
+        project_id:"test_id",
+        project_slug:"test_slug"
+      })
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty("error.name","AlreadyExistsError")
+    });
+
+
     it("deveria falhar na ausência de algum parametro", async () => {
       const test1 = await request(app.app)
         .post("/v1/projects/details")
