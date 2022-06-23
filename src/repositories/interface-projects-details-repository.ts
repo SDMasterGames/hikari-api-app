@@ -15,4 +15,7 @@ export interface IProjectsDetailsRepository {
   ): Promise<ProjectDetail | null>;
 
   update(id: string, data: ProjectDetail): Promise<ProjectDetail>;
+
+  ///apenas para ser usado nos testes
+  cleandb(): Promise<void>;
 }
