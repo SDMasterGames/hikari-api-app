@@ -9,8 +9,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd --respawn --transpile-only src/server.ts",
+    "dev": "tsnd --respawn --transpile-only --exit-child src/server.ts",
     "build": "yarn tsc --build",
+    "build:clean":"yarn tsc --build --clean",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -24,12 +25,14 @@
     "@types/node": "^17.0.41",
     "@types/supertest": "^2.0.12",
     "jest": "^28.1.1",
+    "prisma": "^3.15.2",
     "supertest": "^6.2.3",
     "ts-node": "^10.8.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.7.3"
   },
   "dependencies": {
+    "@prisma/client": "^3.15.2",
     "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.11",
     "cors": "^2.8.5",
