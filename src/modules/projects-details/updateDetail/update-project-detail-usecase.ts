@@ -11,7 +11,7 @@ export class updateProjectDetailUseCase {
   async execute({
     data,
     id,
-  }: IUpdateProjectDetailRequestDTO<AcceptableTypes>): Promise<IHttpResponse> {
+  }: IUpdateProjectDetailRequestDTO): Promise<IHttpResponse> {
     try {
       if (!data || !id) {
         return badRequest(new MissingParams("data, updateType ou id"));

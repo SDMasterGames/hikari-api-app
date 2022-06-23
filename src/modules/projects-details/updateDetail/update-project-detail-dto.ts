@@ -1,5 +1,4 @@
-export interface IUpdateProjectDetailRequestDTO<T> {
-  updateType?: T;
+export interface IUpdateProjectDetailRequestDTO{
   id?: string;
   data?: {
     [key: string]: any;
