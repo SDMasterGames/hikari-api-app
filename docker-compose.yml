@@ -20,20 +20,15 @@ services:
       - redis
       - db
     command: yarn dev
-    environment:
-      DATABASE_URL: db
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: developer
+    env_file:
+      - .env
     links:
       - redis
       - db
     ports:
-      - "8000:8000"
-      - "8181:8181"
+      - 3000:3000
     volumes:
       - .:/hikari-api-app
       - node_modules:/node_modules
-
 volumes:
   node_modules: {}
