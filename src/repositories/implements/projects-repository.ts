@@ -1,7 +1,7 @@
 import cheerio from "cheerio";
 
-import { Chapter } from "../../entities/chapter";
-import { IProjectTags, Project } from "../../entities/project";
+import { Chapter } from "../../entities/Chapter";
+import { IProjectTags, Project } from "../../entities/Project";
 import { HikariWebApi } from "../../services/hikari-web-api";
 import { IProjectsRepository } from "../interface-projects-repository";
 
