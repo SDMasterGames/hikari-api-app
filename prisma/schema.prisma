@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
@@ -14,31 +15,22 @@ model ProjectDetails {
   id           String   @id @default(uuid())
   project_slug String
   project_id   String
-  metrics      Metrics?
+  stats        Stats?
   comments     String[]
 }
 
-model Metrics {
-  id                Int                @id @default(autoincrement())
-  project_detail_id String             @unique
-  project_detail    ProjectDetails     @relation(fields: [project_detail_id], references: [id])
-  views             MetricsDataView[]
-  clicks            MetricsDataClick[]
+model Stats {
+  id                Int            @id @default(autoincrement())
+  project_detail_id String         @unique
+  project_detail    ProjectDetails @relation(fields: [project_detail_id], references: [id])
+  views             StatsView[]
   likes             String[]
 }
 
-model MetricsDataView {
-  id        Int      @id @default(autoincrement())
-  count     Int
-  date      String
-  Metrics   Metrics? @relation(fields: [metricsId], references: [id])
-  metricsId Int?
-}
-
-model MetricsDataClick {
-  id        Int      @id @default(autoincrement())
-  count     Int
-  date      String
-  Metrics   Metrics? @relation(fields: [metricsId], references: [id])
-  metricsId Int?
+model StatsView {
+  id      Int     @id @default(autoincrement())
+  count   Int     @default(0)
+  date    String?
+  Stats   Stats   @relation(fields: [statsId], references: [id])
+  statsId Int
 }
