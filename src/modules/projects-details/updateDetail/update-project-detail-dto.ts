@@ -1,6 +1,5 @@
-export interface IUpdateProjectDetailRequestDTO{
+export interface IUpdateProjectDetailRequestDTO {
   id?: string;
-  data?: {
-    [key: string]: any;
-  };
+  likes?: string;
+  views?: string;
 }
