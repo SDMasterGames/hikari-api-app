@@ -1,5 +1,5 @@
 import { randomInt } from "crypto";
-import { Chapter } from "./chapter";
+import { Chapter } from "./Chapter";
 
 interface IProjectImages {
   cover: {
