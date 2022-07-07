@@ -1,5 +1,5 @@
-import { Chapter } from "../entities/chapter";
-import { IProjectTags, Project } from "../entities/project";
+import { Chapter } from "../entities/Chapter";
+import { IProjectTags, Project } from "../entities/Project";
 export interface IProjectsRepository {
   getTagsByIds(id: number[]): Promise<IProjectTags[]>;
   getMediaById(id: number): Promise<string>;
