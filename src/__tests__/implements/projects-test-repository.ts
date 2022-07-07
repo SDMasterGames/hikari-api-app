@@ -1,5 +1,5 @@
-import { Chapter } from "../../entities/chapter";
-import { IProjectTags, Project } from "../../entities/project";
+import { Chapter } from "../../entities/Chapter";
+import { IProjectTags, Project } from "../../entities/Project";
 import { IProjectsRepository } from "../../repositories/interface-projects-repository";
 
 const projects = [
