@@ -1,21 +1,27 @@
-import { ProjectDetail } from "../entities/project-details";
+import { ProjectDetail } from "../entities";
+import { ProjectDetailData } from "./ports/";
 
 export interface ICreateData {
   project_id: string;
   project_slug: string;
 }
 
-export interface IProjectsDetailsRepository {
-  create(data: ICreateData): Promise<ProjectDetail>;
+export interface ICreateMetricData {
+  project_detail_id: string;
+}
 
-  findById(id: string): Promise<ProjectDetail | null>;
+export interface IProjectsDetailsRepository {
+  create(data: ICreateData): Promise<ProjectDetailData>;
+  //createMetric(data: ICreateMetricData): Promise<Metric>;
+
+  findById(id: string): Promise<ProjectDetailData | null>;
   findByProjectIdAndSlug(
     id: string,
     slug: string
-  ): Promise<ProjectDetail | null>;
+  ): Promise<ProjectDetailData | null>;
 
-  update(id: string, data: ProjectDetail): Promise<ProjectDetail>;
-
+  updateLikes(id: string, data: ProjectDetail): Promise<void>;
+  
   ///apenas para ser usado nos testes
   cleandb(): Promise<void>;
 }
