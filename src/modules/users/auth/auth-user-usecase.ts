@@ -6,32 +6,32 @@ import { badRequest, IHttpResponse, ok, serverError } from "../../httpHelper";
 import { IAuthUserRequestDTO } from "./auth-user-dto";
 
 export class authUserUseCase {
-  constructor(
-    private IUsersRepository: IUsersRepository,
-    private IAuthRepository: IAuthRepository
-  ) {}
-  async execute({ email, uuid }: IAuthUserRequestDTO): Promise<IHttpResponse> {
-    try {
-      if (!email || !uuid) {
-        return badRequest(new MissingParams("email ou uuid"));
-      }
+	constructor(
+		private IUsersRepository: IUsersRepository,
+		private IAuthRepository: IAuthRepository
+	) {}
+	async execute({ email, uuid }: IAuthUserRequestDTO): Promise<IHttpResponse> {
+		try {
+			if (!email || !uuid) {
+				return badRequest(new MissingParams("email ou uuid"));
+			}
 
-      const result = await this.IUsersRepository.findByEmailAndUuid({
-        email,
-        uuid,
-      });
+			const result = await this.IUsersRepository.findByEmailAndUuid({
+				email,
+				uuid,
+			});
 
-      if (!result) {
-        return badRequest(new NotFoundError("Usuário não existe!"));
-      }
+			if (!result) {
+				return badRequest(new NotFoundError("Usuário não existe!"));
+			}
 
-      const user = User.create(result);
+			const user = User.create(result);
 
-      const token = await this.IAuthRepository.authenticate(user.getUuid());
+			const token = await this.IAuthRepository.authenticate(user.getUuid());
 
-      return ok({ user: { ...user.get(), id: result.id }, token });
-    } catch (error: any) {
-      return serverError(error.message);
-    }
-  }
+			return ok({ user: { ...user.get(), id: result.id }, token });
+		} catch (error: any) {
+			return serverError(error.message);
+		}
+	}
 }

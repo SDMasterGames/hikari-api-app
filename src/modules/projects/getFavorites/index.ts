@@ -8,8 +8,8 @@ const cacheRepository = new CacheRepository();
 const projectRepository = new ProjectsRepository();
 
 const GetFavoritesUseCase = new getFavoritesUseCase(
-  projectRepository,
-  cacheRepository
+	projectRepository,
+	cacheRepository
 );
 
 const GetFavoritesController = new getFavoritesController(GetFavoritesUseCase);

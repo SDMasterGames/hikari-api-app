@@ -7,12 +7,12 @@ const projectDetailRepository = new ProjectDetailsRepository();
 const cacheRepository = new CacheRepository();
 
 const GetProjectDetailUseCase = new getProjectDetailUseCase(
-  projectDetailRepository,
-  cacheRepository
+	projectDetailRepository,
+	cacheRepository
 );
 
 const GetProjectDetailController = new getProjectDetailController(
-  GetProjectDetailUseCase
+	GetProjectDetailUseCase
 );
 
 export { GetProjectDetailController, GetProjectDetailUseCase };

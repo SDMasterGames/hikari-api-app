@@ -1,3 +1,3 @@
 interface ControllerError {
-    message: string
-  }
+	message: string;
+}

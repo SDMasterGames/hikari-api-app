@@ -1,4 +1,4 @@
 export interface IAuthUserRequestDTO {
-  uuid?: string;
-  email?: string;
+	uuid?: string;
+	email?: string;
 }

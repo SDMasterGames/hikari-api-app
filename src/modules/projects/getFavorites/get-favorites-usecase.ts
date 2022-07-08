@@ -5,34 +5,34 @@ import { badRequest, IHttpResponse, ok, serverError } from "../../httpHelper";
 import { IGetFavoritesRequestDTO } from "./get-favorites-dto";
 
 export class getFavoritesUseCase {
-  constructor(
-    private IProjectsRepository: IProjectsRepository,
-    private ICacheRepository: ICacheRepository
-  ) {}
+	constructor(
+		private IProjectsRepository: IProjectsRepository,
+		private ICacheRepository: ICacheRepository
+	) {}
 
-  async execute({ id }: IGetFavoritesRequestDTO): Promise<IHttpResponse> {
-    try {
-      if (!id) {
-        return badRequest(new MissingParams("id"));
-      }
-      const ids = id.split(",");
-      if (!Array.isArray(ids) || ids.length === 0) {
-        return badRequest(new InvalidParams(`id must be an array ${ids}`));
-      }
-      const cacheKey = `favorites-${ids.join("-")}`;
+	async execute({ id }: IGetFavoritesRequestDTO): Promise<IHttpResponse> {
+		try {
+			if (!id) {
+				return badRequest(new MissingParams("id"));
+			}
+			const ids = id.split(",");
+			if (!Array.isArray(ids) || ids.length === 0) {
+				return badRequest(new InvalidParams(`id must be an array ${ids}`));
+			}
+			const cacheKey = `favorites-${ids.join("-")}`;
 
-      const cache = await this.ICacheRepository.get(cacheKey);
-      if (cache) {
-        return ok(cache);
-      }
-      const projects = await this.IProjectsRepository.getProjectsByIds(
-        ids.join(", "),
-        ids.length
-      );
-      await this.ICacheRepository.set(cacheKey, projects);
-      return ok(projects);
-    } catch (error: any) {
-      return serverError(error.message);
-    }
-  }
+			const cache = await this.ICacheRepository.get(cacheKey);
+			if (cache) {
+				return ok(cache);
+			}
+			const projects = await this.IProjectsRepository.getProjectsByIds(
+				ids.join(", "),
+				ids.length
+			);
+			await this.ICacheRepository.set(cacheKey, projects);
+			return ok(projects);
+		} catch (error: any) {
+			return serverError(error.message);
+		}
+	}
 }

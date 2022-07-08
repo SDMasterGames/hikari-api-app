@@ -1,3 +1,3 @@
 export interface IRevalidateUserRequestDTO {
-  token?: string;
+	token?: string;
 }

@@ -8,8 +8,8 @@ const projectsRepository = new ProjectsRepository();
 const cacheRepository = new CacheRepository();
 
 const GetChaptersUseCase = new getChaptersUseCase(
-  projectsRepository,
-  cacheRepository
+	projectsRepository,
+	cacheRepository
 );
 
 const GetChaptersController = new getChaptersController(GetChaptersUseCase);

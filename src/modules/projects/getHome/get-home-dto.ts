@@ -1,3 +1,3 @@
-export interface IGetHomeRequestDTO{
-    page?: string;
+export interface IGetHomeRequestDTO {
+	page?: string;
 }

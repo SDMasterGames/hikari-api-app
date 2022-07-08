@@ -1,3 +1,3 @@
 export interface IGetChaptersRequestDTO {
-  slug: string;
+	slug: string;
 }

@@ -1,3 +1,3 @@
 export interface IGetFavoritesRequestDTO {
-  id: string;
+	id: string;
 }

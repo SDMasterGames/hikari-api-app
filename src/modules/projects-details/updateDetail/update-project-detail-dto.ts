@@ -1,5 +1,5 @@
 export interface IUpdateProjectDetailRequestDTO {
-  id?: string;
-  likes?: string;
-  views?: string;
+	id?: string;
+	likes?: string;
+	views?: string;
 }
