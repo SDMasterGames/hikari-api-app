@@ -1,5 +1,7 @@
 # Api para o Aplicativo da Hikari Scan.
 
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 O código atual foi refatorado do zero.
 
 O Aplicativo da [Hikari Scan](https://play.google.com/store/apps/details?id=com.sd.hikariapp)
