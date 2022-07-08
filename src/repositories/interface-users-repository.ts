@@ -1,4 +1,5 @@
 import { User } from "../entities/User";
+import { UserData } from "./ports";
 
 export interface IFindByEmailAndUuidData {
   email: string;
@@ -13,8 +14,8 @@ export interface ICreateUserData{
 }
 
 export interface IUsersRepository {
-  create(data:ICreateUserData): Promise<User>;
+  create(data:ICreateUserData): Promise<UserData>;
 
-  findByEmailAndUuid(data:IFindByEmailAndUuidData): Promise<User | null>;
-  findById(uuid:string): Promise<User | null>;
+  findByEmailAndUuid(data:IFindByEmailAndUuidData): Promise<UserData | null>;
+  findById(uuid:string): Promise<UserData | null>;
 }
