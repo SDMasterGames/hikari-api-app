@@ -1,76 +1,112 @@
-import { randomUUID } from "crypto";
+import { ValidateUtils } from "../utils";
+import { ChapterRead } from "./ChapterRead";
 
 interface IUserProps {
-  id?: string;
   uuid: string;
-
-  profile: {
-    username: string;
-    email: string;
-    avatar_url?: string;
-  };
-  create_at?: string;
-  update_at?: string;
-
-  favorites?: string[];
-  chapters_read?: IChaptersReadProps[];
-}
-
-interface IChaptersReadProps {
-  project_detail_id: string;
-  chapters: string[];
-}
-
-interface IUserGet extends Omit<IUserProps, "uuid"> {
-  create_at: string;
-  update_at: string;
+  username: string;
+  email: string;
+  avatar_url: string;
+  created_at: string;
+  updated_at: string;
   favorites: string[];
-  id: string;
-  chapters_read: IChaptersReadProps[];
+  chapters_read: ChapterRead[];
+}
+
+interface IUserCreateProps {
+  uuid: string;
+  username: string;
+  email: string;
+  avatar_url: string;
+  created_at: string;
+  updated_at: string;
+  favorites: string[];
+  chapters_read: ChapterRead[] | any[];
 }
 
 export class User {
-  private uuid: string;
-  public id: string;
-  public profile: {
+  private readonly uuid: string;
+  private readonly profile: {
     username: string;
     email: string;
     avatar_url: string;
   };
-  public create_at: string;
-  public updated_at: string;
+  private readonly created_at: string;
+  private readonly updated_at: string;
 
-  public favorites: string[];
-  public chapters_read: IChaptersReadProps[];
+  private readonly favorites: string[];
+  private readonly chapters_read: ChapterRead[];
 
-  constructor(props: IUserProps, id?: string) {
-    this.id = id || randomUUID();
+  constructor(props: IUserProps) {
     this.uuid = props.uuid;
     this.profile = {
-      username: props.profile.username,
-      email: props.profile.email,
-      avatar_url: props.profile.avatar_url || "",
+      username: props.username,
+      email: props.email,
+      avatar_url: props.avatar_url,
     };
 
-    this.create_at = props.create_at || new Date().toISOString().split("T")[0];
-    this.updated_at = props.update_at || new Date().toISOString().split("T")[0];
+    this.created_at = props.created_at;
+    this.updated_at = props.updated_at;
 
-    this.chapters_read = props.chapters_read || [];
-    this.favorites = props.favorites || [];
+    this.chapters_read = props.chapters_read;
+    this.favorites = props.favorites;
   }
 
-  get(): IUserGet {
+  getProfile() {
+    return this.profile;
+  }
+
+  getFavorites() {
+    return this.favorites;
+  }
+
+  getAt() {
     return {
-      chapters_read: this.chapters_read,
-      create_at: this.create_at,
-      favorites: this.favorites,
-      profile: this.profile,
-      update_at: this.updated_at,
-      id: this.id,
+      created_at: this.created_at,
+      updated_at: this.updated_at,
     };
   }
 
   getUuid() {
     return this.uuid;
+  }
+
+  get() {
+    return {
+      chapters_read: this.chapters_read,
+      create_at: this.created_at,
+      favorites: this.favorites,
+      profile: this.profile,
+      update_at: this.updated_at,
+    };
+  }
+
+  static create(props: IUserCreateProps) {
+    if (!ValidateUtils.StringValid(props.username)) {
+      throw new Error("username é inválido");
+    }
+
+    if (!ValidateUtils.StringValid(props.email)) {
+      throw new Error("email é inválido");
+    }
+
+    if (!ValidateUtils.StringValid(props.avatar_url)) {
+      throw new Error("avatar_url é inválido");
+    }
+
+    if (!Array.isArray(props.favorites)) {
+      throw new Error("favorites é inválido");
+    }
+
+    if (!Array.isArray(props.chapters_read)) {
+      throw new Error("chapters read é inválido");
+    }
+
+    return new User({
+      ...props,
+      chapters_read:
+        props.chapters_read instanceof ChapterRead
+          ? props.chapters_read
+          : props.chapters_read.map((elem) => ChapterRead.create(elem)),
+    });
   }
 }
