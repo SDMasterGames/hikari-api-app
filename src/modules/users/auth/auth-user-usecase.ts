@@ -1,3 +1,4 @@
+import { User } from "../../../entities";
 import { IAuthRepository } from "../../../repositories/interface-auth-repository";
 import { IUsersRepository } from "../../../repositories/interface-users-repository";
 import { MissingParams, NotFoundError } from "../../errors";
@@ -23,10 +24,12 @@ export class authUserUseCase {
       if (!result) {
         return badRequest(new NotFoundError("Usuário não existe!"));
       }
-      
-      const token = await this.IAuthRepository.authenticate(result.getUuid());
 
-      return ok({ user: result.get(), token });
+      const user = User.create(result);
+
+      const token = await this.IAuthRepository.authenticate(user.getUuid());
+
+      return ok({ user: { ...user.get(), id: result.id }, token });
     } catch (error: any) {
       return serverError(error.message);
     }
