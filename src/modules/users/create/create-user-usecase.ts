@@ -3,6 +3,7 @@ import { IAuthRepository } from "../../../repositories/interface-auth-repository
 import { MissingParams, AlreadyExistsError } from "../../errors";
 import { badRequest, created, serverError } from "../../httpHelper";
 import { ICreateUserRequestDTO } from "./create-user-dto";
+import { User } from "../../../entities";
 
 export class createUserUseCase {
   constructor(
@@ -24,11 +25,19 @@ export class createUserUseCase {
         return badRequest(new AlreadyExistsError("User already exists"));
       }
 
-      const createUser = await this.IUsersRepository.create({
+      const user = User.create({
+        avatar_url: avatar_url || "",
+        favorites: [],
+        chapters_read: [],
         email,
         username,
         uuid,
-        avatar_url,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+      const createUser = await this.IUsersRepository.create({
+        ...user.getProfile(),
+        uuid,
       });
 
       const token = await this.IAuthRepository.authenticate(uuid);
