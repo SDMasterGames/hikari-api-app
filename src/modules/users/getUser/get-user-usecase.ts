@@ -5,11 +5,11 @@ import { IGetUserRequestDTO } from "./get-user-dto";
 
 export class getUserUseCase {
 	constructor(private IUserRepository: IUsersRepository) {}
-	async execute({ id }: IGetUserRequestDTO): Promise<IHttpResponse> {
-		if (!id) {
+	async execute({ uuid }: IGetUserRequestDTO): Promise<IHttpResponse> {
+		if (!uuid) {
 			return badRequest(new MissingParams("uuid is required"));
 		}
-		const user = await this.IUserRepository.findById(id);
+		const user = await this.IUserRepository.findByUuid(uuid);
 		if (!user) {
 			return badRequest(new NotFoundError("User not found"));
 		}

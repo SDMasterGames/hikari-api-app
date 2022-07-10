@@ -1,3 +1,3 @@
 export interface IGetUserRequestDTO {
-	id: string;
+	uuid: string;
 }
