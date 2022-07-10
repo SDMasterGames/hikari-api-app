@@ -1,6 +1,10 @@
 import "dotenv/config";
 import express from "express";
-import { EndpointProjects, EndpointProjectsDetail } from "./routes/";
+import {
+	EndpointProjects,
+	EndpointProjectsDetail,
+	EndpointUsers,
+} from "./routes/";
 
 export class App {
 	public app: express.Application;
@@ -21,6 +25,7 @@ export class App {
 
 		this.app.use(new EndpointProjects().router);
 		this.app.use(new EndpointProjectsDetail().router);
+		this.app.use(new EndpointUsers().router);
 	}
 
 	listen(port: string | number) {
