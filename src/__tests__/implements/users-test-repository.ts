@@ -47,4 +47,5 @@ export class UsersTestRepository implements IUsersRepository {
 	async findById(id: string): Promise<UserData | null> {
 		return Promise.resolve(users.get(id) || null);
 	}
+	async cleandb(): Promise<void> {}
 }
