@@ -50,7 +50,7 @@ export class UsersRepository implements IUsersRepository {
 		});
 		return result;
 	}
-	async findById(uuid: string): Promise<UserData | null> {
+	async findByUuid(uuid: string): Promise<UserData | null> {
 		const result = await UsersDB.findFirst({
 			where: {
 				uuid,
