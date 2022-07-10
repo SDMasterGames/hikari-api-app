@@ -18,4 +18,7 @@ export interface IUsersRepository {
 
 	findByEmailAndUuid(data: IFindByEmailAndUuidData): Promise<UserData | null>;
 	findById(uuid: string): Promise<UserData | null>;
+
+	//usado apenas para testes, nunca usar em produção
+	cleandb(): Promise<void>;
 }
