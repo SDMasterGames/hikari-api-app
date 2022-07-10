@@ -5,8 +5,8 @@ export class getUserController {
 	constructor(private useCase: getUserUseCase) {}
 
 	async handle({ params }: IHttpRequest): Promise<IHttpResponse> {
-		const { id } = params;
-		const result = await this.useCase.execute({ id });
+		const { uuid } = params;
+		const result = await this.useCase.execute({ uuid });
 		return result;
 	}
 }
