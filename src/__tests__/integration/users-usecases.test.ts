@@ -4,6 +4,7 @@ import {
 	CreateUserUseCase,
 	AuthUserUseCase,
 	RevalidateUserUseCase,
+	GetUserUseCase,
 } from "../../modules/users/";
 import { UsersRepository } from "../../repositories/implements/";
 
@@ -15,6 +16,7 @@ describe("Modulos - Users", () => {
 	const uuid = randomUUID();
 	const username = "test";
 	var token = "";
+	var id = "";
 	describe("Create User", () => {
 		it("deveria criar um usuário com sucesso!", async () => {
 			const { status, data, error } = await CreateUserUseCase.execute({
@@ -27,6 +29,7 @@ describe("Modulos - Users", () => {
 			expect(data).toHaveProperty("user");
 			expect(data).not.toHaveProperty("user.uuid");
 			expect(data).not.toHaveProperty("token", undefined);
+			id = data.user.id;
 		});
 		it("deveria falhar ao tentar cadastrar um email que já existe!", async () => {
 			const { status, data, error } = await CreateUserUseCase.execute({
@@ -123,6 +126,24 @@ describe("Modulos - Users", () => {
 			});
 			expect(status).toBe(500);
 			expect(error.message).toBe("jwt expired");
+		});
+	});
+
+	describe("Get User", () => {
+		it("deveria retornar um usuário com sucesso", async () => {
+			const { status, data, error } = await GetUserUseCase.execute({
+				uuid,
+			});
+			expect(status).toBe(200);
+			expect(data).toHaveProperty("id");
+		});
+
+		it("não deveria retornar um usuário", async () => {
+			const { status, data, error } = await GetUserUseCase.execute({
+				uuid: "test",
+			});
+			expect(status).toBe(400);
+			expect(error.name).toBe("NotFoundError");
 		});
 	});
 });
