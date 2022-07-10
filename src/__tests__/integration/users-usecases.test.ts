@@ -23,6 +23,15 @@ describe("Modulos - Users", () => {
 			expect(data).not.toHaveProperty("user.uuid");
 			expect(data).not.toHaveProperty("token", undefined);
 		});
+		it("deveria falhar ao tentar cadastrar um email que já existe!", async () => {
+			const { status, data, error } = await CreateUserUseCase.execute({
+				email,
+				uuid,
+				username,
+			});
+			expect(status).toBe(400);
+			expect(error.name).toBe("AlreadyExistsError");
+		});
 		it("deveria falhar na ausência de um email!", async () => {
 			const { status, data, error } = await CreateUserUseCase.execute({
 				uuid,
