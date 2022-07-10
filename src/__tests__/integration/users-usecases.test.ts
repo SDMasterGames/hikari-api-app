@@ -1,6 +1,10 @@
 import { randomUUID } from "crypto";
 import "dotenv/config";
-import { CreateUserUseCase, AuthUserUseCase } from "../../modules/users/";
+import {
+	CreateUserUseCase,
+	AuthUserUseCase,
+	RevalidateUserUseCase,
+} from "../../modules/users/";
 import { UsersRepository } from "../../repositories/implements/";
 
 const usersRepository = new UsersRepository();
@@ -93,6 +97,32 @@ describe("Modulos - Users", () => {
 
 			expect(status).toBe(400);
 			expect(error.name).toBe("MissingParams");
+		});
+	});
+
+	describe("Revalidate User", () => {
+		it("deveria revalidar o usuário com sucesso", async () => {
+			const { status, data, error } = await RevalidateUserUseCase.execute({
+				token,
+			});
+			expect(status).toBe(200);
+		});
+
+		it("deveria falha por jwt malformatado", async () => {
+			const { status, data, error } = await RevalidateUserUseCase.execute({
+				token: "pao",
+			});
+
+			expect(status).toBe(500);
+			expect(error.message).toBe("jwt malformed");
+		});
+		it("deveria falha por token expirado", async () => {
+			await new Promise(r => setTimeout(r, 1000)); //1 segundo
+			const { status, data, error } = await RevalidateUserUseCase.execute({
+				token,
+			});
+			expect(status).toBe(500);
+			expect(error.message).toBe("jwt expired");
 		});
 	});
 });
