@@ -1,6 +1,6 @@
 export interface ChapterReadData {
-	id: string;
-	userId: string;
+	id: number;
+	userId: string | null;
 	project_detail_id: string;
 	chapters: string[];
 }
