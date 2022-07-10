@@ -34,3 +34,23 @@ model StatsView {
   Stats   Stats   @relation(fields: [statsId], references: [id])
   statsId Int
 }
+
+model User {
+  id            String        @id @default(uuid())
+  uuid          String        @unique
+  username      String
+  email         String        @unique
+  avatar_url    String
+  created_at    String
+  updated_at    String
+  favorites     String[]
+  chapters_read ChapterRead[]
+}
+
+model ChapterRead {
+  id                Int      @id @default(autoincrement())
+  project_detail_id String
+  chapters          String[]
+  User              User?    @relation(fields: [userId], references: [id])
+  userId            String?
+}
