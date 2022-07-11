@@ -12,7 +12,11 @@ export class AuthRepository implements IAuthRepository {
 	}
 
 	async verify(token: string): Promise<any> {
-		const decoded = JWT.verify(token, config.private_key);
-		return decoded;
+		try {
+			const decoded = JWT.verify(token, config.private_key);
+			return { data: decoded };
+		} catch (error) {
+			return { error: error };
+		}
 	}
 }
