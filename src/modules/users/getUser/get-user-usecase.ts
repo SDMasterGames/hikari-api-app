@@ -1,3 +1,4 @@
+import { User } from "../../../entities";
 import { IUsersRepository } from "../../../repositories/interface-users-repository";
 import { MissingParams, NotFoundError } from "../../errors";
 import { badRequest, IHttpResponse, ok } from "../../httpHelper";
@@ -14,6 +15,6 @@ export class getUserUseCase {
 			return badRequest(new NotFoundError("User not found"));
 		}
 
-		return ok(user);
+		return ok({ ...User.create({ ...user, uuid }).get(), id: user.id });
 	}
 }
