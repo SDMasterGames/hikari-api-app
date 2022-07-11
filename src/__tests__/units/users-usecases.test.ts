@@ -112,13 +112,15 @@ describe("Module - Users", () => {
 
 	describe("Get User", () => {
 		it("deveria retornar um usuário com sucesso", async () => {
-			const { status, data, error } = await getUser.execute({ id: user.id });
+			const { status, data, error } = await getUser.execute({
+				uuid: user.uuid,
+			});
 			expect(status).toBe(200);
 			expect(data).toHaveProperty("id");
 		});
 
 		it("não deveria retornar um usuário", async () => {
-			const { status, data, error } = await getUser.execute({ id: "test" });
+			const { status, data, error } = await getUser.execute({ uuid: "test" });
 			expect(status).toBe(400);
 			expect(error.name).toBe("NotFoundError");
 		});
