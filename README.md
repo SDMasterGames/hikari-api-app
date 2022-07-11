@@ -4,8 +4,6 @@
 
 O código atual foi refatorado do zero.
 
-O Aplicativo da [Hikari Scan](https://play.google.com/store/apps/details?id=com.sd.hikariapp)
-
 #### Mudanças feitas:
 
 - Testes unitários e de integração.
