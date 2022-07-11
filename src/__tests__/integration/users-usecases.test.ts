@@ -118,7 +118,8 @@ describe("Modulos - Users", () => {
 				token: "pao",
 			});
 
-			expect(status).toBe(500);
+			expect(status).toBe(400);
+			expect(error.name).toBe("AuthError");
 			expect(error.message).toBe("jwt malformed");
 		});
 		it("deveria falha por token expirado", async () => {
@@ -126,7 +127,8 @@ describe("Modulos - Users", () => {
 			const { status, data, error } = await RevalidateUserUseCase.execute({
 				token,
 			});
-			expect(status).toBe(500);
+			expect(status).toBe(400);
+			expect(error.name).toBe("AuthError");
 			expect(error.message).toBe("jwt expired");
 		});
 	});
