@@ -35,7 +35,7 @@ export class createUserUseCase {
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString(),
 			});
-			const { uuid: not, ...createdUser } = await this.IUsersRepository.create({
+			const createdUser = await this.IUsersRepository.create({
 				...user.getProfile(),
 				uuid,
 			});
@@ -43,7 +43,7 @@ export class createUserUseCase {
 			const token = await this.IAuthRepository.authenticate(uuid);
 
 			return created({
-				user: createdUser,
+				user: { ...User.create(createdUser).get(), id: createdUser.id },
 				token: token,
 			});
 		} catch (error: any) {
