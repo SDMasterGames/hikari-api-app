@@ -27,6 +27,7 @@ describe("Modulos - Users", () => {
 			expect(status).toBe(201);
 			expect(data).toHaveProperty("token");
 			expect(data).toHaveProperty("user");
+			expect(data).toHaveProperty("user.profile");
 			expect(data).not.toHaveProperty("user.uuid");
 			expect(data).not.toHaveProperty("token", undefined);
 			id = data.user.id;
@@ -79,6 +80,7 @@ describe("Modulos - Users", () => {
 			expect(status).toBe(200);
 			expect(data).toHaveProperty("token");
 			expect(data).toHaveProperty("user");
+			expect(data).toHaveProperty("user.profile");
 			expect(data.user).not.toHaveProperty("uuid");
 			expect(data.user).toHaveProperty("id");
 		});
@@ -136,6 +138,7 @@ describe("Modulos - Users", () => {
 			});
 			expect(status).toBe(200);
 			expect(data).toHaveProperty("id");
+			expect(data).toHaveProperty("profile");
 		});
 
 		it("não deveria retornar um usuário", async () => {

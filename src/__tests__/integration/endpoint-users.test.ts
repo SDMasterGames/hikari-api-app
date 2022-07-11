@@ -26,6 +26,7 @@ describe("Endpoint - Users", () => {
 				});
 			expect(statusCode).toBe(201);
 			expect(body).toHaveProperty("user.id");
+			expect(body).toHaveProperty("user.profile");
 			expect(body).toHaveProperty("token");
 			id = body.user.id;
 			token = body.token;
@@ -88,6 +89,7 @@ describe("Endpoint - Users", () => {
 			expect(status).toBe(200);
 			expect(body).toHaveProperty("token");
 			expect(body).toHaveProperty("user");
+			expect(body).toHaveProperty("user.profile");
 			expect(body.user).not.toHaveProperty("uuid");
 			expect(body.user).toHaveProperty("id");
 		});
