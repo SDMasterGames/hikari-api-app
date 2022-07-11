@@ -131,7 +131,7 @@ describe("Endpoint - Users", () => {
 				"/v1/users/revalidate/" + "sdsdd"
 			);
 
-			expect(status).toBe(500);
+			expect(status).toBe(400);
 			expect(body.error.message).toBe("jwt malformed");
 		});
 		it("deveria falha por token expirado", async () => {
@@ -139,7 +139,7 @@ describe("Endpoint - Users", () => {
 			const { status, body, error } = await request(app.app).get(
 				"/v1/users/revalidate/" + token
 			);
-			expect(status).toBe(500);
+			expect(status).toBe(400);
 			expect(body.error.message).toBe("jwt expired");
 		});
 	});
