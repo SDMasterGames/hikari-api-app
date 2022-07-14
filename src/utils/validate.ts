@@ -16,4 +16,7 @@ export class ValidateUtils {
 			})
 			.map(([key]) => key);
 	}
+	static validateImageUrl(url: string): boolean {
+		return /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/gi.test(url);
+	}
 }
