@@ -44,11 +44,23 @@ export class UsersTestRepository implements IUsersRepository {
 		return Promise.resolve(user || null);
 	}
 
+	async updateAvatarUrl(uuid: string, avatar_url: string): Promise<void> {
+		const user = (await this.findByUuid(uuid)) as UserData;
+		user.avatar_url = avatar_url;
+		users.set(user.id, user);
+	}
+
+	async updateFavorites(uuid: string, favorites: string[]): Promise<void> {
+		const user = (await this.findByUuid(uuid)) as UserData;
+		user.favorites = favorites;
+		users.set(user.id, user);
+	}
+
 	async findByUuid(uuid: string): Promise<UserData | null> {
 		var user = null;
 		users.forEach((value, key) => {
 			if (value.uuid != uuid) return;
-			user = value;
+			user = JSON.parse(JSON.stringify(value));
 		});
 		return Promise.resolve(user);
 	}
