@@ -170,6 +170,7 @@ describe("Modulos - Users", () => {
 			expect(status).toBe(200);
 			expect(data).not.toHaveProperty("uuid");
 			expect(data).toHaveProperty("favorites[0]", "node");
+			expect(data).toHaveProperty("favorites.length", 1);
 		});
 		it("deveria remover o favorito do usuário", async () => {
 			const { status, data, error } = await UpdateUserUseCase.execute({
@@ -178,7 +179,7 @@ describe("Modulos - Users", () => {
 			});
 			expect(status).toBe(200);
 			expect(data).not.toHaveProperty("uuid");
-			expect(data).not.toHaveProperty("favorites[0]", "node");
+			expect(data).toHaveProperty("favorites.length", 0);
 		});
 
 		it("deveria falhar na ausência de um uuid", async () => {
