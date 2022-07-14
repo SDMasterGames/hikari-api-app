@@ -5,6 +5,7 @@ import {
 	AuthUserUseCase,
 	RevalidateUserUseCase,
 	GetUserUseCase,
+	UpdateUserUseCase,
 } from "../../modules/users/";
 import { UsersRepository } from "../../repositories/implements/";
 
@@ -149,6 +150,60 @@ describe("Modulos - Users", () => {
 			});
 			expect(status).toBe(400);
 			expect(error.name).toBe("NotFoundError");
+		});
+	});
+	describe("Update User", () => {
+		it("deveria atualizar com sucesso o avatar_url do usuário", async () => {
+			const { status, data, error } = await UpdateUserUseCase.execute({
+				uuid,
+				avatar_url: "https",
+			});
+			expect(status).toBe(200);
+			expect(data).not.toHaveProperty("uuid");
+			expect(data).toHaveProperty("profile.avatar_url", "https");
+		});
+		it("deveria adicionar um favorito novo ao usuário", async () => {
+			const { status, data, error } = await UpdateUserUseCase.execute({
+				uuid,
+				favorites: "node",
+			});
+			expect(status).toBe(200);
+			expect(data).not.toHaveProperty("uuid");
+			expect(data).toHaveProperty("favorites[0]", "node");
+		});
+		it("deveria remover o favorito do usuário", async () => {
+			const { status, data, error } = await UpdateUserUseCase.execute({
+				uuid,
+				favorites: "node",
+			});
+			expect(status).toBe(200);
+			expect(data).not.toHaveProperty("uuid");
+			expect(data).not.toHaveProperty("favorites[0]", "node");
+		});
+
+		it("deveria falhar na ausência de um uuid", async () => {
+			const { status, data, error } = await UpdateUserUseCase.execute({
+				uuid: "",
+			});
+			expect(status).toBe(400);
+			expect(error.name).toBe("MissingParams");
+		});
+		it("deveria falhar ao informa um avatar_url inválido", async () => {
+			const { status, data, error } = await UpdateUserUseCase.execute({
+				uuid,
+				avatar_url: "",
+			});
+			expect(status).toBe(400);
+			expect(error.name).toBe("MissingParams");
+		});
+
+		it("deveria falhar ao informa um favorites inválido", async () => {
+			const { status, data, error } = await UpdateUserUseCase.execute({
+				uuid,
+				favorites: "",
+			});
+			expect(status).toBe(400);
+			expect(error.name).toBe("MissingParams");
 		});
 	});
 });
