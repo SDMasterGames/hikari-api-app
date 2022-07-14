@@ -50,6 +50,25 @@ export class UsersRepository implements IUsersRepository {
 		});
 		return result;
 	}
+
+	async updateAvatarUrl(uuid: string, avatar_url: string): Promise<void> {
+		await UsersDB.update({
+			where: { uuid },
+			data: {
+				avatar_url,
+			},
+		});
+	}
+
+	async updateFavorites(uuid: string, favorites: string[]): Promise<void> {
+		await UsersDB.update({
+			where: { uuid },
+			data: {
+				favorites,
+			},
+		});
+	}
+
 	async findByUuid(uuid: string): Promise<UserData | null> {
 		const result = await UsersDB.findFirst({
 			where: {
