@@ -2,7 +2,7 @@ import { User } from "../../../entities";
 import { IUsersRepository } from "../../../repositories/interface-users-repository";
 import { UserData } from "../../../repositories/ports";
 import { ValidateUtils } from "../../../utils";
-import { MissingParams, NotFoundError } from "../../errors";
+import { InvalidParams, MissingParams, NotFoundError } from "../../errors";
 import { badRequest, ok, serverError } from "../../httpHelper";
 import { IUpdateUserRequestDTO } from "./update-user-dto";
 
@@ -35,6 +35,8 @@ export class updateUserUseCase {
 			});
 
 			if (shouldUpdateAvatarUrl(UpdateDataDTO)) {
+				if (!ValidateUtils.validateImageUrl(UpdateDataDTO.avatar_url as string))
+					return badRequest(new InvalidParams("avatar_url inválido"));
 				await this.IUserRepository.updateAvatarUrl(
 					changedUser.getUuid(),
 					changedUser.getProfile().avatar_url
