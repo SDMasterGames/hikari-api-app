@@ -19,6 +19,9 @@ export interface IUsersRepository {
 	findByEmailAndUuid(data: IFindByEmailAndUuidData): Promise<UserData | null>;
 	findByUuid(uuid: string): Promise<UserData | null>;
 
+	updateAvatarUrl(uuid: string, avatar_url: string): Promise<void>;
+	updateFavorites(uuid: string, favorites: string[]): Promise<void>;
+
 	//usado apenas para testes, nunca usar em produção
 	cleandb(): Promise<void>;
 }
