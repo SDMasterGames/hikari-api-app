@@ -131,12 +131,25 @@ describe("Module - Users", () => {
 		it("deveria atualizar com sucesso o avatar_url do usuário", async () => {
 			const { status, data, error } = await updateUser.execute({
 				uuid: user.uuid,
-				avatar_url: "https",
+				avatar_url: "https://github.com/matheusgmc.png",
 			});
 			expect(status).toBe(200);
 			expect(data).not.toHaveProperty("uuid");
-			expect(data).toHaveProperty("profile.avatar_url", "https");
+			expect(data).toHaveProperty(
+				"profile.avatar_url",
+				"https://github.com/matheusgmc.png"
+			);
 		});
+
+		it("deveria falhar ao informa um avatar_url inválido", async () => {
+			const { status, data, error } = await updateUser.execute({
+				uuid: user.uuid,
+				avatar_url: "https://github.com/matheusgmc",
+			});
+			expect(status).toBe(400);
+			expect(error.name).toBe("InvalidParams");
+		});
+
 		it("deveria adicionar um favorito novo ao usuário", async () => {
 			const { status, data, error } = await updateUser.execute({
 				uuid: user.uuid,
